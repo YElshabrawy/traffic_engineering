@@ -1,5 +1,4 @@
 import GoSCalculator from '@/components/GoSCalculator';
-import TrafficCalculator from '@/components/TrafficCalculator';
 
 export default function Home() {
     return (

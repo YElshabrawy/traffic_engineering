@@ -1,5 +1,3 @@
-import algebra from 'algebra.js';
-
 const factorial = (n: number): number => {
     if (n === 0 || n === 1) {
         return 1;
@@ -81,60 +79,4 @@ export const calculateGoS = (
         calculatedGoS = calculateBinomial(N, A / K, K);
 
     return calculatedGoS;
-};
-
-function solveEquation(equation: string, threshold = 0.001) {
-    const sides = equation.split('=');
-
-    const f = (x: number) => {
-        const leftSide = sides[0].replace(/x/g, `(${x})`);
-        const rightSide = sides[1].replace(/x/g, `(${x})`);
-        return eval(leftSide) - eval(rightSide);
-    };
-
-    let x = 0; // Initial guess for x
-    let fx = f(x);
-
-    // Iterate until the difference is below the threshold
-    while (Math.abs(fx) > threshold) {
-        // Adjust x by a small amount
-        x += 0.1;
-        fx = f(x);
-    }
-
-    return x;
-}
-
-function calculateTrafficIntensity(N: number, GoS: number): number {
-    const erlangB = (A: number, N: number): number => {
-        let numerator = Math.pow(A, N) / factorial(N);
-        let denominator = 0;
-        for (let n = 0; n <= N; n++) {
-            denominator += Math.pow(A, n) / factorial(n);
-        }
-        return numerator / denominator;
-    };
-
-    let A = 0.01; // Initial guess for A
-    let blockingProbability = erlangB(A, N);
-
-    // Adjust A until the blocking probability matches the GoS
-    while (blockingProbability * 100 > GoS) {
-        A += 0.01;
-        blockingProbability = erlangB(A, N);
-    }
-
-    return A;
-}
-
-export const calculateTraffic = (
-    N: number,
-    GoSPercentage: number,
-    method: 'Erlang B' | 'Erlang C'
-) => {
-    const p = GoSPercentage / 100;
-
-    if (method === 'Erlang B') {
-        return calculateTrafficIntensity(N, GoSPercentage);
-    } else return 0;
 };
